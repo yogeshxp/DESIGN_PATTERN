@@ -2,6 +2,7 @@ using DESIGN_PATTERN.Patterns.Behavioural.ObserverPattern;
 using DESIGN_PATTERN.Patterns.Creational.BuilderPattern;
 using DESIGN_PATTERN.Patterns.Creational.FactoryMethod;
 using DESIGN_PATTERN.Patterns.Creational.Singleton;
+using DESIGN_PATTERN.Patterns.Structural.DecoratorPattern;
 
 #region Singleton Method
 //Console.WriteLine("--- Singleton ---");
@@ -119,30 +120,48 @@ Notify	                        Sends updates to observers
  */
 
 
-var shipment = new ShipmentsPublisher
-{
-    ShipmentNumber = "XPCN00001"
-};
+//var shipment = new ShipmentsPublisher
+//{
+//    ShipmentNumber = "XPCN00001"
+//};
 
 
-var SMS = new SmsService();
-var EMAIL = new EmailService();
+//var SMS = new SmsService();
+//var EMAIL = new EmailService();
 
 
-//Subscribed
-shipment.statusChanged += SMS.SendSMS;
-shipment.statusChanged += EMAIL.SendEMAIL;
+////Subscribed
+//shipment.statusChanged += SMS.SendSMS;
+//shipment.statusChanged += EMAIL.SendEMAIL;
 
 
-shipment.changeStatus("IN-TRANSHIT");
+//shipment.changeStatus("IN-TRANSHIT");
 
 
-//Unsubscribed
-shipment.statusChanged -= EMAIL.SendEMAIL;
+////Unsubscribed
+//shipment.statusChanged -= EMAIL.SendEMAIL;
 
 
-shipment.changeStatus("DELIVERED");
+//shipment.changeStatus("DELIVERED");
 
 
+
+#endregion
+
+
+#region Decorator Pattern
+
+
+
+INotificationService service =
+            new ValidationDecorator(
+                new LoggingDecorator(
+
+                    new MetricsDecorator(
+                    new EmailNotificationService())
+                )
+            );
+
+service.Send("Shipment XPCN1001 is IN_TRANSIT");
 
 #endregion
